@@ -28,7 +28,7 @@ const App = () => {
     useEffect(() => {
       const token = localStorage.getItem('token');
       //console.log(window.localStorage)
-      if(token !== "undefined"){
+      if(token !== "undefined" && token){
         setIsAuth(true);
       }else{
         const urlParams = new URLSearchParams(location.search);
@@ -50,7 +50,7 @@ const App = () => {
       <div className="container flex-grow-1">
         <Switch>
           <Route path="/" exact><LoginPage onClick={handleLoginClick} isAuthenticated={isAuth}/></Route>
-          <Route path="/dashboard" component={Dashboard} />
+          <Route path="/dashboard" exact><Dashboard token={localStorage.getItem('token')} /></Route>
           <Route path="/albums" component={Album} />
           <Route path="/artists" component={Artist} />
           <Route path="/tracks" component={Track} />
