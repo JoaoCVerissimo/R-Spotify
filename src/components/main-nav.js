@@ -15,30 +15,6 @@ function MainNav({show}){
       >
       Dashboard
       </NavLink>
-      <NavLink
-        to="/albums"
-        exact
-        className="nav-link"
-        activeClassName="router-link-exact-active"
-      >
-      Albums
-      </NavLink>
-      <NavLink
-        to="/artists"
-        exact
-        className="nav-link"
-        activeClassName="router-link-exact-active"
-      >
-      Artists
-      </NavLink>
-      <NavLink
-        to="/tracks"
-        exact
-        className="nav-link"
-        activeClassName="router-link-exact-active"
-      >
-      Tracks
-      </NavLink>
     </div>
     :
     <div className="navbar-nav mr-auto">
@@ -48,7 +24,7 @@ function MainNav({show}){
       className="nav-link"
       activeClassName="router-link-exact-active"
     >
-    Home
+    Login Page
     </NavLink>
     </div>
     }

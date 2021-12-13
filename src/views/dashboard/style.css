@@ -1,0 +1,43 @@
+.dashboard {
+    width: 100%;
+    height: 82vh; 
+}
+.image-cover-container {
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dashboard-title {
+    font-size: 2.2rem;
+    text-align: center;
+}
+
+.dashboard-searchbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.dashboard-searchbox-input {
+    height: 30px;
+    width: 300px;
+    border-radius: 8px;
+    background-color: #F2F2F2;
+    border: 1px solid #b3b3b3;
+    padding: 0 4px;
+    margin-right: 1rem;
+}
+
+.dashboard-searchbox-button {
+    height: 30px;
+    width: 100px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    background-color: #1DB954;
+    font-weight: 700;
+    cursor: pointer;
+}

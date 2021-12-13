@@ -7,7 +7,7 @@ import Footer from './components/footer';
 import NavBar from "./components/nav-bar";
 
 import Dashboard from './views/dashboard/dashboard';
-import Home from "./views/home/home";
+import LoginPage from "./views/loginPage/loginPage";
 import Album from "./views/album/album";
 import Artist from "./views/artist/artist";
 import Track from "./views/track/track";
@@ -23,12 +23,12 @@ const App = () => {
       const result = await spotifyAuthCall(spotifyCode);
       const status = localStorage.getItem('status');
       if(status === '200') setIsAuth(true);
-      console.log(result, window.localStorage, status);
     };
   
     useEffect(() => {
       const token = localStorage.getItem('token');
-      if(token){
+      //console.log(window.localStorage)
+      if(token !== "undefined"){
         setIsAuth(true);
       }else{
         const urlParams = new URLSearchParams(location.search);
@@ -49,7 +49,7 @@ const App = () => {
       <NavBar authenticated={isAuth}/>
       <div className="container flex-grow-1">
         <Switch>
-          <Route path="/" exact><Home onClick={handleLoginClick}/></Route>
+          <Route path="/" exact><LoginPage onClick={handleLoginClick} isAuthenticated={isAuth}/></Route>
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/albums" component={Album} />
           <Route path="/artists" component={Artist} />
