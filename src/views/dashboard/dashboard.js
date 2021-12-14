@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import dashboardImage from "../../assets/home.jpeg";
 
+import dashboardImage from "../../assets/home.jpeg";
 import { spotifySearchCall } from '../../utils/spotifySearchCall';
 
 import "./style.css";
 
-const Dashboard = ({token}) => {
+const Dashboard = (props) => {
     const [searchText, setSearchText] = useState("");
 
     const handleSearchClick = async () => {
@@ -18,7 +18,9 @@ const Dashboard = ({token}) => {
             limit: 5,
         }
         ];
+        const token = localStorage.getItem("token");
         const response = await spotifySearchCall(paramsArray, token);
+        if(response?.error?.status) props.history.push("/")
         console.log(response);
     }
 

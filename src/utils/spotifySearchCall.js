@@ -13,6 +13,8 @@ export const spotifySearchCall = async (paramsArray, token) => {
                 Authorization: `Bearer ${token}`,
             }
         });
+        let status = getSearch.status;
+        window.localStorage.setItem("status", status);
         
         return await getSearch.json();
     } catch (error) {

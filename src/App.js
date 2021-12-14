@@ -7,7 +7,7 @@ import Footer from './components/footer';
 import NavBar from "./components/nav-bar";
 
 import Dashboard from './views/dashboard/dashboard';
-import LoginPage from "./views/loginPage/loginPage";
+import LoginPage from "./views/loginPage/login-page";
 import Album from "./views/album/album";
 import Artist from "./views/artist/artist";
 import Track from "./views/track/track";
@@ -16,7 +16,7 @@ import {spotifyAuthCall} from "./utils/spotifyAuthCall";
 
 const App = () => {
     const [isAuth, setIsAuth] = useState(false);
-
+    
     const location = useLocation();
 
     const authenticateUser = async (spotifyCode) => {
@@ -27,13 +27,14 @@ const App = () => {
   
     useEffect(() => {
       const token = localStorage.getItem('token');
-      //console.log(window.localStorage)
-      if(token !== "undefined" && token){
+      const status = localStorage.getItem('status');
+
+      if(token !== "undefined" && token && status !== 401){
         setIsAuth(true);
       }else{
+        setIsAuth(false);
         const urlParams = new URLSearchParams(location.search);
         const spotifyCode = urlParams.get("code");
-  
         if(!isAuth) authenticateUser(spotifyCode);
       }
     }, [location.search, isAuth]);
@@ -50,7 +51,7 @@ const App = () => {
       <div className="container flex-grow-1">
         <Switch>
           <Route path="/" exact><LoginPage onClick={handleLoginClick} isAuthenticated={isAuth}/></Route>
-          <Route path="/dashboard" exact><Dashboard token={localStorage.getItem('token')} /></Route>
+          <Route path="/dashboard" exact component={Dashboard} />
           <Route path="/albums" component={Album} />
           <Route path="/artists" component={Artist} />
           <Route path="/tracks" component={Track} />
