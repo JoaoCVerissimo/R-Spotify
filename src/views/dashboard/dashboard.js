@@ -11,7 +11,6 @@ import SearchBar from '../../components/search-bar';
 import "./style.css";
 
 const Dashboard = (props) => {
-    const [searchText, setSearchText] = useState("");
     const [followed, setFollowed] = useState([]);
     const [tracks, setTracks] = useState([]);
     const [albums, setAlbums] = useState([]);
@@ -38,11 +37,9 @@ const Dashboard = (props) => {
         setLoading(false);
     }
 
-    const redirectToAlbumDetails = () => { props.history.push("/albums") }
+    const redirectToAlbumDetails = (id) => { props.history.push({pathname: "/albums", state: {id}}) }
     const redirectToTrackDetails = () => { props.history.push("/tracks") }
     const redirectToArtistDetails = () => { props.history.push("/artists") }
-
-    const setSearch = (value) => { setSearchText(value) }
 
     useEffect(() => {
         let token = localStorage.getItem("token");
@@ -53,21 +50,19 @@ const Dashboard = (props) => {
         <div className="dashboard">
             <div style={{backgroundImage: `url(${dashboardImage})`}} className="image-cover-container"/>
             <h2 className="dashboard-title">Procura pelos teus artistas, albums ou músicas favoritas</h2>
-            <SearchBar searchText={searchText} setSearch={setSearch} />
+            <SearchBar />
             {loading ? 
-            <Box sx={{ display: 'flex' }} style={{justifyContent: "center", marginTop: 50}}>
-                <CircularProgress />
-            </Box>
+            <Box sx={{ display: 'flex' }} style={{justifyContent: "center", marginTop: 50}}><CircularProgress /></Box>
             :
             <div className="my-top-five">
                 <div className="followed">
-                <BasicCard type={"followed"} artists={followed} onClickArtist={redirectToArtistDetails}/>
+                <BasicCard type={"followed"} artists={followed} onClickArtist={() => redirectToArtistDetails()}/>
                 </div>
                 <div className="saved-tracks">
-                <BasicCard type={"tracks"} tracks={tracks} onClickTrack={redirectToTrackDetails}/>
+                <BasicCard type={"tracks"} tracks={tracks} onClickTrack={() => redirectToTrackDetails()}/>
                 </div>
                 <div className="saved-albums">
-                <BasicCard type={"album"} albums={albums} onClickAlbum={redirectToAlbumDetails}/>
+                <BasicCard type={"album"} albums={albums} onClickAlbum={(id) => redirectToAlbumDetails(id)}/>
                 </div>
             </div>
             }

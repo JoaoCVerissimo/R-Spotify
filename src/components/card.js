@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import "../views/dashboard/style.css"
 const Str = require('@supercharge/strings')
 
 export default function BasicCard(props) {
@@ -19,8 +20,13 @@ export default function BasicCard(props) {
                 <Box sx={{display: "flex", flexDirection: "column"}}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
                         <Typography sx={{ fontSize: 16 }} color="text.secondary" gutterBottom>Your Top 5 saved albums:</Typography>
-                        {albums.map((album, index) => {
-                            return <Typography key={index} sx={{ mb: 0.2 }} color="text.secondary" onClick={onClickAlbum} style={{cursor: 'pointer'}}>{Str(album.album.name).limit(25, '...').get()}</Typography>
+                        {albums.map(({album}, index) => {
+                            return (
+                            <div className="dashboard-searchbox" style={{justifyContent: "flex-start"}}>
+                                <img src={album.images[0].url} alt="album" style={{width: 25, height: 25, marginRight: 5}}/>
+                                <Typography key={index} sx={{ mb: 0.2 }} color="text.secondary" onClick={() => onClickAlbum(album.id)} style={{cursor: 'pointer'}}>{Str(album.name).limit(20, '...').get()}</Typography>
+                            </div>
+                            )
                         })}
                     </CardContent>
                 </Box>

@@ -1,12 +1,13 @@
-import * as React from 'react';
+import React, {useEffect} from "react";
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
-const Album = () => {
+const Album = ({location: {state}, history}) => {
+    useEffect(() => {
+        if(!state) history.push("/dashboard");
+    }, []);
     return (
-        <Box sx={{ display: 'flex' }} style={{justifyContent: "center"}}>
-            <CircularProgress />
-        </Box>
+        <div>{state?.id}</div>
     );
 };
 

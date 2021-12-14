@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "../views/dashboard/style.css";
 
 import { spotifySearchCall } from '../utils/spotifySearchCall';
 
 const SearchBar = (props) => {
-    const {searchText, setSearch} = props;
+    const [searchText, setSearchText] = useState("");
     
     const handleSearchClick = async () => {
         const paramsArray = [
@@ -21,6 +21,8 @@ const SearchBar = (props) => {
         if(response?.error?.status) props.history.push("/")
         console.log(response);
     }
+
+    const setSearch = (value) => { setSearchText(value) }
 
     return (
     <div className="dashboard-searchbox">
