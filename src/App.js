@@ -29,7 +29,7 @@ const App = () => {
       const token = localStorage.getItem('token');
       const status = localStorage.getItem('status');
 
-      if(token !== "undefined" && token && status !== 401){
+      if(token !== "undefined" && token && status !== "401"){
         setIsAuth(true);
       }else{
         setIsAuth(false);
@@ -40,8 +40,8 @@ const App = () => {
     }, [location.search, isAuth]);
   
     const handleLoginClick = () => {
-      // &scope=user-read-private
-      const spotifyURL = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_SPOTIFY_CALLBACK_HOST}`;
+      const scope = "user-top-read user-read-playback-state user-read-private user-follow-modify user-read-playback-position user-follow-read user-library-modify user-library-read user-read-email playlist-read-collaborative playlist-modify-public playlist-read-private user-read-recently-played user-read-currently-playing"
+      const spotifyURL = `https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_SPOTIFY_CLIENT_ID}&response_type=code&redirect_uri=${process.env.REACT_APP_SPOTIFY_CALLBACK_HOST}&scope=${scope}`;
       window.location.replace(spotifyURL)
     };
 
@@ -51,7 +51,7 @@ const App = () => {
       <div className="container flex-grow-1">
         <Switch>
           <Route path="/" exact><LoginPage onClick={handleLoginClick} isAuthenticated={isAuth}/></Route>
-          <Route path="/dashboard" exact component={Dashboard} />
+          <Route path="/dashboard" exact component={Dashboard}/>
           <Route path="/albums" component={Album} />
           <Route path="/artists" component={Artist} />
           <Route path="/tracks" component={Track} />

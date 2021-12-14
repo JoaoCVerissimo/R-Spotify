@@ -55,21 +55,15 @@
     width: 30%;
     padding: 0px 4px;
     margin-right: 3rem;
-    background-color: blue;
-    color:white;
 }
 
 .saved-tracks {
     width: 30%;
     padding: 0px 4px;
     margin-right: 3rem;
-    background-color: black;
-    color:white;
 }
 
 .saved-albums {
     width: 30%;
     padding: 0px 4px;
-    background-color: rgb(95, 95, 48);
-    color:white;
 }

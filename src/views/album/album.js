@@ -1,10 +1,12 @@
-import React from 'react';
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const Album = () => {
     return (
-        <div>
-            Hello Album
-        </div>
+        <Box sx={{ display: 'flex' }} style={{justifyContent: "center"}}>
+            <CircularProgress />
+        </Box>
     );
 };
 
