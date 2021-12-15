@@ -1,71 +1,59 @@
-// export const spotifyAlbumsTracksCall = async (paramsArray, token) => {
-//     try {
-//         const url = new URL("https://api.spotify.com/v1/me/albums");
+export const spotifyAlbumsCall = async (id, token) => {
+  try {
+    const url = `https://api.spotify.com/v1/albums/${id}`;
 
-//         for(const item of paramsArray){
-//             const key = Object.keys(item);
-//             url.searchParams.append(key, item[key]);
-//         }
+    const getSearch = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    let status = getSearch.status;
+    localStorage.setItem("status", status);
+    if (status === 401) localStorage.removeItem("token");
 
-//         const getSearch = await fetch(url, {
-//             method: "GET",
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             }
-//         });
-//         let status = getSearch.status;
-//         window.localStorage.setItem("status", status);
-        
-//         return await getSearch.json();
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    return await getSearch.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// export const spotifyAlbumsTracksCall = async (paramsArray, token) => {
-//     try {
-//         const url = new URL("https://api.spotify.com/v1/me/albums");
+export const spotifyTracksCall = async (id, token) => {
+  try {
+    const url = `https://api.spotify.com/v1/tracks/${id}`;
 
-//         for(const item of paramsArray){
-//             const key = Object.keys(item);
-//             url.searchParams.append(key, item[key]);
-//         }
+    const getSearch = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    let status = getSearch.status;
+    localStorage.setItem("status", status);
+    if (status === 401) localStorage.removeItem("token");
 
-//         const getSearch = await fetch(url, {
-//             method: "GET",
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             }
-//         });
-//         let status = getSearch.status;
-//         window.localStorage.setItem("status", status);
-        
-//         return await getSearch.json();
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    return await getSearch.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-// export const spotifyAlbumsTracksCall = async (paramsArray, token) => {
-//     try {
-//         const url = new URL("https://api.spotify.com/v1/me/albums");
+export const spotifyArtistsCall = async (id, token) => {
+  try {
+    const url = `https://api.spotify.com/v1/artists/${id}`;
 
-//         for(const item of paramsArray){
-//             const key = Object.keys(item);
-//             url.searchParams.append(key, item[key]);
-//         }
+    const getSearch = await fetch(url, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      }
+    });
+    let status = getSearch.status;
+    localStorage.setItem("status", status);
+    if (status === 401) localStorage.removeItem("token");
 
-//         const getSearch = await fetch(url, {
-//             method: "GET",
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             }
-//         });
-//         let status = getSearch.status;
-//         window.localStorage.setItem("status", status);
-        
-//         return await getSearch.json();
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+    return await getSearch.json();
+  } catch (error) {
+    console.log(error);
+  }
+};

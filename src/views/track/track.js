@@ -1,12 +1,18 @@
-import * as React from 'react';
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import React, { useEffect } from 'react';
+import { spotifyTracksCall } from "../../utils/spotifyDetailsCall";
 
-const Track = () => {
+const Track = ({ location: { state }, history }) => {
+    useEffect(async () => {
+        if (!state) history.push("/dashboard");
+        const trackResponse = await spotifyTracksCall(state.id, localStorage.getItem("token"));
+        if (trackResponse?.error?.status || !localStorage.getItem("token")) return history.push("/");
+        console.log(trackResponse);
+    }, []);
+
     return (
-        <Box sx={{ display: 'flex' }} style={{justifyContent: "center"}}>
-            <CircularProgress />
-        </Box>
+        <div>
+            Agora meto aqui a página bonita com os dados retornados do endpoint com o id: {state?.id}
+        </div>
     );
 };
 

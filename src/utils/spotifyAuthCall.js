@@ -6,7 +6,6 @@ const commonParams = {
 }
 
 export const spotifyAuthCall = async (code) => {
-    let myStorage = window.localStorage;
     try {
         const params = {
             code,
@@ -25,8 +24,10 @@ export const spotifyAuthCall = async (code) => {
 
         let status = spotifyCall.status;
         const result = await spotifyCall.json();
-        myStorage.setItem("token", result.access_token);
-        myStorage.setItem("status", status);
+        
+        localStorage.setItem("token", result.access_token);
+        localStorage.setItem("status", status);
+        
         return result;
     } catch (error) {
         console.log(error);
