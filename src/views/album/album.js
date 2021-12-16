@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+import CheckIcon from '@mui/icons-material/Check';
+
 import "./style.css";
 
 const Album = ({ location: { state }, history }) => {
@@ -16,6 +18,7 @@ const Album = ({ location: { state }, history }) => {
     const [albumImage, setAlbumImage] = useState();
     const [albumArtist, setAlbumArtist] = useState();
     const [album, setAlbum] = useState({});
+    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         if (!state) history.push("/dashboard");
@@ -31,16 +34,19 @@ const Album = ({ location: { state }, history }) => {
         const AlbumTracksResponse = await spotifyAlbumTracksCall(state.id, token);
         if (AlbumTracksResponse?.error?.status || !token) return history.push("/");
 
+        setAlbum(albumResponse);
+        setAlbumImage(albumResponse.images[0]?.url);
+        setAlbumArtist(albumResponse.artists[0].name);
+        setTracks(AlbumTracksResponse.items);
+        setLoading(false);
+    }
+
+    const saveAlbum = async () => {
+        const token = localStorage.getItem("token");
         const saveAlbumResponse = await spotifySaveAlbumCall(state.id, token);
         if (saveAlbumResponse?.error?.status || !token) return history.push("/");
 
-        console.log(AlbumTracksResponse.items);
-
-        setLoading(false);
-        setAlbum(albumResponse);
-        setAlbumImage(albumResponse.images[0].url);
-        setAlbumArtist(albumResponse.artists[0].name);
-        setTracks(AlbumTracksResponse.items);
+        setSaved(true);
     }
 
     return (
@@ -62,10 +68,11 @@ const Album = ({ location: { state }, history }) => {
                                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
                                         <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Basic album info:</Typography>
-                                        <Typography variant="body2"> From: {albumArtist} </Typography>
-                                        <Typography variant="body2"> Name: {album.name} </Typography>
-                                        <Typography variant="body2"> Release date: {album.release_date} </Typography>
-                                        <Typography variant="body2"> Total tracks: {album.total_tracks} </Typography>
+                                        <Typography variant="body2"> <b>From:</b> {albumArtist} </Typography>
+                                        <Typography variant="body2"> <b>Name:</b> {album.name} </Typography>
+                                        <Typography variant="body2"> <b>Release date:</b> {album.release_date} </Typography>
+                                        <Typography variant="body2"> <b>Total tracks:</b> {album.total_tracks} </Typography>
+                                        <Typography variant="body2"><b>Save the album: </b>{saved ? <CheckIcon /> : <button className="follow-button" onClick={saveAlbum}>Add to library</button>}</Typography>
                                     </CardContent>
                                 </Box>
                             </Card>

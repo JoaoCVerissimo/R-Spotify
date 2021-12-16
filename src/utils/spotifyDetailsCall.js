@@ -184,7 +184,6 @@ export const spotifyArtistFollowCall = async (id, token) => {
 
 export const spotifyArtistUnfollowCall = async (id, token) => {
   try {
-    console.log(id);
     const url = `https://api.spotify.com/v1/me/following?type=artist&ids=${id}`;
 
     const getSearch = await fetch(url, {

@@ -1,0 +1,188 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.head-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 0.5rem;
+}
+
+.image-container {
+  height: 320px;
+}
+
+.body-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+
+  margin-top: 3rem;
+}
+
+.left-container {
+  width: 30%;
+}
+
+.mid-container {
+  width: 30%;
+}
+
+.right-container {
+  width: 30%;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(224, 99, 126);
+}
+
+a:hover {
+  color: red;
+}
+
+/*
+
+
+
+
+-------------------------
+
+
+
+
+
+*/
+
+#shadowBox {
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.2);
+  /* Black w/opacity/see-through */
+  border: 3px solid;
+}
+
+.rainbow {
+  text-align: center;
+  text-decoration: underline;
+  font-size: 32px;
+  font-family: monospace;
+  letter-spacing: 5px;
+}
+.rainbow_text_animated {
+  background: linear-gradient(to right, #6666ff, #0099ff , #00ff00, #ff3399, #6666ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+
+@keyframes rainbow_animation {
+  0%,100% {
+      background-position: 0 0;
+  }
+
+  50% {
+      background-position: 100% 0;
+  }
+}
+
+/*
+
+
+
+
+-------------------------
+
+
+
+
+
+*/
+
+@import url('https://fonts.googleapis.com/css?family=Montserrat:600&display=swap');
+
+.button-dashboard{
+  position: relative;
+  display: inline-flex;
+  width: 120px;
+  height: 55px;
+  margin: 0 15px;
+  perspective: 1000px;
+}
+.button-dashboard a{
+  font-size: 16px;
+  letter-spacing: 1px;
+  transform-style: preserve-3d;
+  transform: translateZ(-25px);
+  transition: transform .25s;
+  font-family: 'Montserrat', sans-serif;
+  
+}
+.button-dashboard a:before,
+.button-dashboard a:after{
+  position: absolute;
+  content: "Dashboard";
+  height: 55px;
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 5px solid black;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+.button-dashboard a:before{
+  color: #fff;
+  background: #000;
+  transform: rotateY(0deg) translateZ(25px);
+}
+.button-dashboard a:after{
+  color: #000;
+  transform: rotateX(90deg) translateZ(25px);
+}
+.button-dashboard a:hover{
+  transform: translateZ(-25px) rotateX(-90deg);
+}
+
+/*
+
+
+
+
+-------------------------
+
+
+
+
+
+*/
+
+.follow-button {
+  display: inline-block;
+  outline: none;
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  border-radius: 500px;
+  transition-property: background-color,border-color,color,box-shadow,filter;
+  transition-duration: .3s;
+  border: 1px solid transparent;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  white-space: normal;
+  font-weight: 700;
+  text-align: center;
+  color: #fff;
+  background-color: #15883e;
+  height: 24px;
+}
+
+.follow-button:hover{
+  background-color: #1db954;
+}

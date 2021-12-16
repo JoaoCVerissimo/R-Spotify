@@ -8,6 +8,8 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
+import CheckIcon from '@mui/icons-material/Check';
+
 import "./style.css";
 
 const Track = ({ location: { state }, history }) => {
@@ -15,6 +17,7 @@ const Track = ({ location: { state }, history }) => {
     const [albumImage, setAlbumImage] = useState();
     const [trackArtists, setTrackArtists] = useState([]);
     const [track, setTrack] = useState({});
+    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         if (!state) history.push("/dashboard");
@@ -27,14 +30,18 @@ const Track = ({ location: { state }, history }) => {
         const trackResponse = await spotifyTracksCall(state.id, token);
         if (trackResponse?.error?.status || !token) return history.push("/");
 
+        setTrack(trackResponse);
+        setAlbumImage(trackResponse.album.images[0]?.url);
+        setTrackArtists(trackResponse.artists)
+        setLoading(false);
+    }
+
+    const saveTrack = async () => {
+        const token = localStorage.getItem("token");
         const saveTrackResponse = await spotifySaveTracksCall(state.id, token);
         if (saveTrackResponse?.error?.status || !token) return history.push("/");
 
-        setLoading(false);
-
-        setTrack(trackResponse);
-        setAlbumImage(trackResponse.album.images[0].url);
-        setTrackArtists(trackResponse.artists)
+        setSaved(true);
     }
 
     return (
@@ -55,13 +62,14 @@ const Track = ({ location: { state }, history }) => {
                             <Card sx={{ minWidth: 275, display: 'flex' }}>
                                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Basic track info:</Typography>
+                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Basic track info: </Typography>
                                         {trackArtists.map((artist, index) => {
-                                            return <Typography key={index} variant="body2"> Artist-{index + 1}: {artist.name} </Typography>
+                                            return <Typography key={index} variant="body2"> <b>Artist-{index + 1}: </b> {artist.name} </Typography>
                                         })}
-                                        <Typography variant="body2"> Name: {track.name} </Typography>
-                                        <Typography variant="body2"> Duration: {track.duration_ms / 1000} seconds</Typography>
-                                        <Typography variant="body2"> Listen to the song: <a href={track.uri}>{track.name}</a></Typography>
+                                        <Typography variant="body2"> <b>Name: </b> {track.name} </Typography>
+                                        <Typography variant="body2"> <b>Duration: </b> {track.duration_ms / 1000} seconds</Typography>
+                                        <Typography variant="body2"> <b>Listen to the song: </b> <a href={track.uri}>{track.name}</a></Typography>
+                                        <Typography variant="body2"><b>Save the track: </b>{saved ? <CheckIcon /> : <button className="follow-button" onClick={saveTrack}>Add to library</button>}</Typography>
                                     </CardContent>
                                 </Box>
                             </Card>
