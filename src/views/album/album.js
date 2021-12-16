@@ -1,11 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { spotifyAlbumsCall, spotifyAlbumTracksCall, spotifySaveAlbumCall } from "../../utils/spotifyDetailsCall";
 
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+import "./style.css";
+
 const Album = ({ location: { state }, history }) => {
     const [loading, setLoading] = useState(true);
+    const [tracks, setTracks] = useState([]);
+    const [albumImage, setAlbumImage] = useState();
+    const [albumArtist, setAlbumArtist] = useState();
+    const [album, setAlbum] = useState({});
 
     useEffect(() => {
         if (!state) history.push("/dashboard");
@@ -24,9 +34,13 @@ const Album = ({ location: { state }, history }) => {
         const saveAlbumResponse = await spotifySaveAlbumCall(state.id, token);
         if (saveAlbumResponse?.error?.status || !token) return history.push("/");
 
-        console.log(albumResponse, AlbumTracksResponse, saveAlbumResponse);
+        console.log(AlbumTracksResponse.items);
 
         setLoading(false);
+        setAlbum(albumResponse);
+        setAlbumImage(albumResponse.images[0].url);
+        setAlbumArtist(albumResponse.artists[0].name);
+        setTracks(AlbumTracksResponse.items);
     }
 
     return (
@@ -34,8 +48,41 @@ const Album = ({ location: { state }, history }) => {
             {loading ?
                 <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
                 :
-                <div>
-                    Agora meto aqui a página bonita com os dados retornados do endpoint com o id: {state?.id}
+                <div className="main-container">
+                    <div className="head-container">
+                        <span className="button-dashboard" onClick={() => history.push("/dashboard")}><a href="#"></a></span>
+                        <h3 className="rainbow rainbow_text_animated">Cover Image</h3>
+                        <div className="image-container">
+                            <img src={albumImage} alt="cover" style={{ width: 320, height: 320 }} />
+                        </div>
+                    </div>
+                    <div className="body-container">
+                        <div className="left-container">
+                            <Card sx={{ minWidth: 275, display: 'flex' }}>
+                                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                    <CardContent sx={{ flex: '1 0 auto' }}>
+                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Basic album info:</Typography>
+                                        <Typography variant="body2"> From: {albumArtist} </Typography>
+                                        <Typography variant="body2"> Name: {album.name} </Typography>
+                                        <Typography variant="body2"> Release date: {album.release_date} </Typography>
+                                        <Typography variant="body2"> Total tracks: {album.total_tracks} </Typography>
+                                    </CardContent>
+                                </Box>
+                            </Card>
+                        </div>
+                        <div className="right-container">
+                            <Card sx={{ minWidth: 275, display: 'flex' }}>
+                                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                                    <CardContent sx={{ flex: '1 0 auto' }}>
+                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Album tracks and links:</Typography>
+                                        {tracks.map((track, index) => {
+                                            return <Typography key={index} variant="body2"> <a href={track.uri}>{track.name}</a></Typography>;
+                                        })}
+                                    </CardContent>
+                                </Box>
+                            </Card>
+                        </div>
+                    </div>
                 </div>
             }
         </>

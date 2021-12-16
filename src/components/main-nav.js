@@ -6,7 +6,7 @@ function MainNav() {
   return (
     <>
       {token ?
-        <div className="navbar-nav mr-auto">
+        <div className="navbar-nav w-100 justify-content-between">
           <NavLink
             to="/dashboard"
             exact
@@ -26,7 +26,6 @@ function MainNav() {
             style={{
               fontWeight: "bold",
               color: "red",
-              marginLeft: 850,
             }}
           >
             Logout

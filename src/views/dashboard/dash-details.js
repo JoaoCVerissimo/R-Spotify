@@ -4,6 +4,8 @@ import { spotifySearchCall } from '../../utils/spotifySearchCall';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
+import "./style.css"
+
 const Track = ({ location: { state: { message } }, history }) => {
   const [loading, setLoading] = useState(true);
 
@@ -37,8 +39,8 @@ const Track = ({ location: { state: { message } }, history }) => {
       {loading ?
         <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
         :
-        <div>
-          Agora meto aqui a página bonita
+        <div className="background">
+
         </div>
       }
     </>

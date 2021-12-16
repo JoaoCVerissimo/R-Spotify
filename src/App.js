@@ -25,7 +25,7 @@ const App = () => {
   return (
     <Router>
       <div className="d-flex flex-column h-100">
-        <div className="container flex-grow-1">
+        <div className="container-fluid flex-grow-1">
           <Switch>
             <Route path="/" exact><LoginPage onClick={handleLoginClick} /></Route>
             <Route path="/dashboard" exact component={Dashboard} />
