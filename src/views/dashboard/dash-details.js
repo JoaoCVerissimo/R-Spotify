@@ -1,34 +1,47 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { spotifySearchCall } from '../../utils/spotifySearchCall';
 
-const Track = ({ location: { state: { message } }, history }) => {
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
-  const handleSearchClick = async () => {
+const Track = ({ location: { state: { message } }, history }) => {
+  const [loading, setLoading] = useState(true);
+
+  const handlePageInfo = async () => {
     const paramsArray = [
       {
         q: message.searchText,
       }, {
         type: "track,artist,album",
       }, {
-        limit: 5,
+        limit: 50,
       }
     ];
     let token = localStorage.getItem("token");
-    return await spotifySearchCall(paramsArray, token);
+    const detailsResponse = await spotifySearchCall(paramsArray, token);
+    if (detailsResponse?.error?.status || !token) return history.push("/");
+
+    console.log(detailsResponse);
+
+    setLoading(false);
   }
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!message) history.push("/dashboard");
-    const detailsResponse = await handleSearchClick();
-    if (detailsResponse?.error?.status || !localStorage.getItem("token")) return history.push("/");
-    console.log(detailsResponse);
+    handlePageInfo();
   }, []);
 
 
   return (
-    <div>
-      Agora meto aqui a página bonita
-    </div>
+    <>
+      {loading ?
+        <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
+        :
+        <div>
+          Agora meto aqui a página bonita
+        </div>
+      }
+    </>
   );
 };
 
