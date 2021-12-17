@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { spotifyArtistFollowCall, spotifyArtistUnfollowCall } from "../utils/spotifyDetailsCall";
 
@@ -19,7 +19,8 @@ const Follow = ({ artist }) => {
 
   return (
     <Typography variant="body2">
-      <a href={artist.uri}>{artist.name}</a><br />Follow:{" "}
+      <Link style={{ textDecoration: "none" }} to={`/artists/${artist.id}`}>{artist.name}</Link>
+      <br />Follow:{" "}
       <button className="follow-button" onClick={() => followArtist(artist.id)}> {follow ? "Unfollow artist" : "Follow artist"}</button>
     </Typography>
   )

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { spotifyArtistsCall, spotifyArtistTopTracksCall, spotifyArtistAlbumsCall, spotifyArtistFollowCall, spotifyArtistUnfollowCall } from "../../utils/spotifyDetailsCall";
 
+import { useParams } from "react-router";
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -19,21 +21,24 @@ const Artist = ({ location: { state }, history }) => {
     const [artistTopTracks, setArtistTopTracks] = useState([]);
     const [artistAlbums, setArtistAlbums] = useState([]);
 
+    const { id } = useParams();
+
     useEffect(() => {
-        if (!state) history.push("/dashboard");
+        const token = localStorage.getItem("token");
+        if (!token) history.push("/");
         handlePageInfo();
     }, []);
 
     const handlePageInfo = async () => {
         const token = localStorage.getItem("token");
 
-        const artistResponse = await spotifyArtistsCall(state.id, token);
+        const artistResponse = await spotifyArtistsCall(id, token);
         if (artistResponse?.error?.status || !token) return history.push("/");
 
-        const topTracksResponse = await spotifyArtistTopTracksCall(state.id, token);
+        const topTracksResponse = await spotifyArtistTopTracksCall(id, token);
         if (topTracksResponse?.error?.status || !token) return history.push("/");
 
-        const artistAlbumsResponse = await spotifyArtistAlbumsCall(state.id, token);
+        const artistAlbumsResponse = await spotifyArtistAlbumsCall(id, token);
         if (artistAlbumsResponse?.error?.status || !token) return history.push("/");
 
         setArtist(artistResponse);
@@ -46,7 +51,7 @@ const Artist = ({ location: { state }, history }) => {
 
     const unfollowArtist = async () => {
         const token = localStorage.getItem("token");
-        const result = await spotifyArtistUnfollowCall(state.id, token);
+        const result = await spotifyArtistUnfollowCall(id, token);
         if (result?.error?.status || !token) return history.push("/");
 
         setFollow(!follow);
@@ -54,7 +59,7 @@ const Artist = ({ location: { state }, history }) => {
 
     const followArtist = async () => {
         const token = localStorage.getItem("token");
-        const result = await spotifyArtistFollowCall(state.id, localStorage.getItem("token"));
+        const result = await spotifyArtistFollowCall(id, localStorage.getItem("token"));
         if (result?.error?.status || !token) return history.push("/");
 
         setFollow(!follow);
@@ -78,13 +83,13 @@ const Artist = ({ location: { state }, history }) => {
                             <Card sx={{ minWidth: 275, display: 'flex' }}>
                                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Basic artist info:</Typography>
+                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Artist info:</Typography>
                                         <Typography variant="body2"><b>Name:</b> {artist.name} </Typography>
                                         <Typography variant="body2"><b>Genres played:</b>
                                             {artistGenres.map((genre, index) => {
                                                 return (index + 1) < artistGenres.length ? " " + genre + ", " : genre + ".";
                                             })} </Typography>
-                                        <Typography variant="body2"> <b>Check out the artist:</b><a href={artist.uri}> {artist.name}</a></Typography>
+                                        <Typography variant="body2"> <b>Check out the artist on spotify:</b><a href={artist.uri}> {artist.name}</a></Typography>
                                         <Typography variant="body2">Would you like to follow the artist? If so, press the button: <button className="follow-button" onClick={follow ? unfollowArtist : followArtist}>{follow ? "Unfollow artist" : "Follow artist"}</button></Typography>
                                     </CardContent>
                                 </Box>

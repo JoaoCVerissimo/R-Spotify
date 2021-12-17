@@ -29,9 +29,9 @@ const App = () => {
           <Switch>
             <Route path="/" exact><LoginPage onClick={handleLoginClick} /></Route>
             <Route path="/dashboard" exact component={Dashboard} />
-            <Route path="/albums" component={Album} />
-            <Route path="/artists" component={Artist} />
-            <Route path="/tracks" component={Track} />
+            <Route path="/albums/:id" component={Album} />
+            <Route path="/artists/:id" component={Artist} />
+            <Route path="/tracks/:id" component={Track} />
             <Route path="/callback" component={Callback} />
             <Route path="/logout" component={Logout} />
             <Route path="/dash-details" component={DashDetails} />

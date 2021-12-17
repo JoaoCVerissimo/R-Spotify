@@ -76,7 +76,7 @@ const Track = ({ location: { state: { message } }, history }) => {
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Artist details:</Typography>
-                    <Typography variant="body2">There are currently at least <b>{artists.length}</b> artists with the name you entered</Typography>
+                    <Typography variant="body2">There are currently {artists.length === 0 ? "" : "at least"}<b>{artists.length}</b> artists with the name you entered</Typography>
                     <Typography variant="body2">
                       <b>Artists: </b>
                       {artists.map((artist, index) => <Follow artist={artist} key={index} />)}

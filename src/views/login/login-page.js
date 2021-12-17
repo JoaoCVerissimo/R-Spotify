@@ -6,7 +6,7 @@ import NavBar from "../../components/nav-bar";
 import "./style.css"
 
 
-function LoginPage({onClick}) {
+function LoginPage({ onClick }) {
   const token = localStorage.getItem("token");
 
   return (
@@ -14,14 +14,14 @@ function LoginPage({onClick}) {
       <NavBar />
       <div className="home-container">
         <div className="home-left-child">
-          <h3>Bem-vindo</h3>
+          <h3>Welcome</h3>
           {token ?
-          <h6>Desloca-te à dashboard para teres acesso aos teus artistas favoritos</h6>
-          :
-          <h6>Inicia sessão para teres acesso às tuas músicas e artistas favoritos</h6>}
-          {token ? <></> : <button onClick={onClick}>Iniciar sessão</button>}
+            <h6>Go to the dashboard to access your favorite artists</h6>
+            :
+            <h6>Sign in to have access to your favorite songs and artists</h6>}
+          {token ? <></> : <button onClick={onClick}>Sign in</button>}
         </div>
-        <div className="home-right-child" style={{backgroundImage: `url(${homeImage})`}}/>
+        <div className="home-right-child" style={{ backgroundImage: `url(${homeImage})` }} />
       </div>
     </>
   );

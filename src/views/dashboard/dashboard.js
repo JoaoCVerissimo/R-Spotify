@@ -36,9 +36,9 @@ const Dashboard = (props) => {
         setLoading(false);
     }
 
-    const redirectToAlbumDetails = (id) => { props.history.push({ pathname: "/albums", state: { id } }) }
-    const redirectToTrackDetails = (id) => { props.history.push({ pathname: "/tracks", state: { id } }) }
-    const redirectToArtistDetails = (id) => { props.history.push({ pathname: "/artists", state: { id } }) }
+    const redirectToAlbumDetails = (id) => { props.history.push({ pathname: `/albums/${id}` }) }
+    const redirectToTrackDetails = (id) => { props.history.push({ pathname: `/tracks/${id}` }) }
+    const redirectToArtistDetails = (id) => { props.history.push({ pathname: `/artists/${id}` }) }
 
     useEffect(() => {
         let token = localStorage.getItem("token");
@@ -50,7 +50,7 @@ const Dashboard = (props) => {
             <NavBar />
             <div className="dashboard">
                 <div style={{ backgroundImage: `url(${dashboardImage})` }} className="image-cover-container" />
-                <h2 className="dashboard-title">Procura pelos teus artistas, albums ou músicas favoritas</h2>
+                <h2 className="dashboard-title">Search for your favorite artists, albums or songs</h2>
                 <SearchBar props={props} />
                 {loading ?
                     <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>

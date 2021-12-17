@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { spotifyAlbumsCall, spotifyAlbumTracksCall, spotifySaveAlbumCall } from "../../utils/spotifyDetailsCall";
 
+import { useParams } from "react-router";
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -20,18 +22,21 @@ const Album = ({ location: { state }, history }) => {
     const [album, setAlbum] = useState({});
     const [saved, setSaved] = useState(false);
 
+    const { id } = useParams();
+
     useEffect(() => {
-        if (!state) history.push("/dashboard");
+        const token = localStorage.getItem("token");
+        if (!token) history.push("/");
         handlePageInfo();
     }, []);
 
     const handlePageInfo = async () => {
         const token = localStorage.getItem("token");
 
-        const albumResponse = await spotifyAlbumsCall(state.id, token);
+        const albumResponse = await spotifyAlbumsCall(id, token);
         if (albumResponse?.error?.status || !token) return history.push("/");
 
-        const AlbumTracksResponse = await spotifyAlbumTracksCall(state.id, token);
+        const AlbumTracksResponse = await spotifyAlbumTracksCall(id, token);
         if (AlbumTracksResponse?.error?.status || !token) return history.push("/");
 
         setAlbum(albumResponse);
@@ -43,7 +48,7 @@ const Album = ({ location: { state }, history }) => {
 
     const saveAlbum = async () => {
         const token = localStorage.getItem("token");
-        const saveAlbumResponse = await spotifySaveAlbumCall(state.id, token);
+        const saveAlbumResponse = await spotifySaveAlbumCall(id, token);
         if (saveAlbumResponse?.error?.status || !token) return history.push("/");
 
         setSaved(true);
@@ -67,7 +72,7 @@ const Album = ({ location: { state }, history }) => {
                             <Card sx={{ minWidth: 275, display: 'flex' }}>
                                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Basic album info:</Typography>
+                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Album info:</Typography>
                                         <Typography variant="body2"> <b>From:</b> {albumArtist} </Typography>
                                         <Typography variant="body2"> <b>Name:</b> {album.name} </Typography>
                                         <Typography variant="body2"> <b>Release date:</b> {album.release_date} </Typography>
@@ -81,7 +86,7 @@ const Album = ({ location: { state }, history }) => {
                             <Card sx={{ minWidth: 275, display: 'flex' }}>
                                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                                     <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Album tracks and links:</Typography>
+                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Album tracks with spotify links:</Typography>
                                         {tracks.map((track, index) => {
                                             return <Typography key={index} variant="body2"> <a href={track.uri}>{track.name}</a></Typography>;
                                         })}

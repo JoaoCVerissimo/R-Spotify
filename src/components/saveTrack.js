@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { spotifySaveTracksCall } from "../utils/spotifyDetailsCall";
 
@@ -19,7 +19,8 @@ const SaveTrack = ({ track }) => {
 
   return (
     <Typography variant="body2">
-      <a href={track.uri}>{track.name}</a><br />Save to your library:{" "}
+      <Link style={{ textDecoration: "none" }} to={`/tracks/${track.id}`}>{track.name}</Link>
+      <br />Save to your library:{" "}
       {saved ? <CheckIcon /> : <button className="follow-button" onClick={() => saveToLibrary(track.id)}>Save</button>}
     </Typography>
   )

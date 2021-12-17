@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { spotifyTracksCall, spotifySaveTracksCall } from "../../utils/spotifyDetailsCall";
 
+import { useParams } from "react-router";
+
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
@@ -19,15 +21,18 @@ const Track = ({ location: { state }, history }) => {
     const [track, setTrack] = useState({});
     const [saved, setSaved] = useState(false);
 
+    const { id } = useParams();
+
     useEffect(() => {
-        if (!state) history.push("/dashboard");
+        const token = localStorage.getItem("token");
+        if (!token) history.push("/");
         handlePageInfo();
     }, []);
 
     const handlePageInfo = async () => {
         const token = localStorage.getItem("token");
 
-        const trackResponse = await spotifyTracksCall(state.id, token);
+        const trackResponse = await spotifyTracksCall(id, token);
         if (trackResponse?.error?.status || !token) return history.push("/");
 
         setTrack(trackResponse);
@@ -38,7 +43,7 @@ const Track = ({ location: { state }, history }) => {
 
     const saveTrack = async () => {
         const token = localStorage.getItem("token");
-        const saveTrackResponse = await spotifySaveTracksCall(state.id, token);
+        const saveTrackResponse = await spotifySaveTracksCall(id, token);
         if (saveTrackResponse?.error?.status || !token) return history.push("/");
 
         setSaved(true);
