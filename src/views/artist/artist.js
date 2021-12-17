@@ -110,7 +110,7 @@ const Artist = ({ location: { state }, history }) => {
                                         {artistAlbums.map((album, index) => {
                                             return (
                                                 <div key={index + 1000} className="dashboard-searchbox" style={{ justifyContent: "flex-start" }}>
-                                                    <img key={index + 100} src={album.images[0].url} alt="album" style={{ width: 25, height: 25, marginRight: 5 }} />
+                                                    <img key={index + 100} src={album?.images[0]?.url} alt="album" style={{ width: 25, height: 25, marginRight: 5 }} />
                                                     <Typography key={index} variant="body2"><a href={album.uri}>{album.name}</a></Typography>
                                                 </div>
                                             )
