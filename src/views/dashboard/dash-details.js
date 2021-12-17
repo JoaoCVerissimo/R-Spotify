@@ -14,11 +14,16 @@ import Typography from '@mui/material/Typography';
 
 import "./style.css"
 import Follow from '../../components/follow';
+import NavBar from "../../components/nav-bar";
+import SaveAlbum from '../../components/saveAlbum';
+import SaveTrack from '../../components/saveTrack';
 
 const Track = ({ location: { state: { message } }, history }) => {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState("");
   const [artists, setArtists] = useState([]);
+  const [albums, setAlbums] = useState([]);
+  const [tracks, setTracks] = useState([]);
 
   const handlePageInfo = async () => {
     const paramsArray = [
@@ -34,8 +39,10 @@ const Track = ({ location: { state: { message } }, history }) => {
     const detailsResponse = await spotifySearchCall(paramsArray, token);
     if (detailsResponse?.error?.status || !token) return history.push("/");
 
-    console.log(detailsResponse.artists);
+    console.log(detailsResponse);
     setArtists(detailsResponse.artists.items);
+    setAlbums(detailsResponse.albums.items);
+    setTracks(detailsResponse.tracks.items);
 
     setLoading(false);
   }
@@ -50,7 +57,7 @@ const Track = ({ location: { state: { message } }, history }) => {
   const setTrack = () => setSelected("Track");
 
   return (
-    <>
+    <><NavBar />
       {loading ?
         <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
         :
@@ -80,13 +87,12 @@ const Track = ({ location: { state: { message } }, history }) => {
               : ""
             }
             {selected === "Album" ?
-              <Card sx={{ minWidth: 275, display: 'flex', marginTop: 2, }}>
+              <Card sx={{ minWidth: 275, display: 'flex', marginTop: 2, overflow: "scroll", maxHeight: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Album details:</Typography>
-                    {/* {tracks.map((track, index) => {
-                return <Typography key={index} variant="body2"> <a href={track.uri}>{track.name}</a></Typography>;
-              })} */}
+                    <Typography variant="body2">There are currently at least <b>{albums.length}</b> albums associated with the name you entered</Typography>
+                    {albums.map((album, index) => <SaveAlbum album={album} key={index} />)}
                   </CardContent>
                 </Box>
               </Card>
@@ -94,13 +100,12 @@ const Track = ({ location: { state: { message } }, history }) => {
               ""
             }
             {selected === "Track" ?
-              <Card sx={{ minWidth: 275, display: 'flex', marginTop: 2, }}>
+              <Card sx={{ minWidth: 275, display: 'flex', marginTop: 2, overflow: "scroll", maxHeight: 500 }}>
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <CardContent sx={{ flex: '1 0 auto' }}>
                     <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Track details:</Typography>
-                    {/* {tracks.map((track, index) => {
-                return <Typography key={index} variant="body2"> <a href={track.uri}>{track.name}</a></Typography>;
-              })} */}
+                    <Typography variant="body2">There are currently at least <b>{albums.length}</b> tracks associated with the name you entered</Typography>
+                    {tracks.map((track, index) => <SaveTrack track={track} key={index} />)}
                   </CardContent>
                 </Box>
               </Card>
