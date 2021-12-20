@@ -12,64 +12,64 @@ import NavBar from "../../components/nav-bar";
 import "./style.css";
 
 const Dashboard = (props) => {
-    const [followed, setFollowed] = useState([]);
-    const [tracks, setTracks] = useState([]);
-    const [albums, setAlbums] = useState([]);
-    const [loading, setLoading] = useState(true);
+	const [followed, setFollowed] = useState([]);
+	const [tracks, setTracks] = useState([]);
+	const [albums, setAlbums] = useState([]);
+	const [loading, setLoading] = useState(true);
 
-    const handlePageInfo = async (token) => {
-        const followedParamsArray = [{ type: "artist", }, { limit: 5, }];
-        const followedResponse = await spotifyFollowedArtistCall(followedParamsArray, token);
-        if (followedResponse?.error?.status || !localStorage.getItem("token")) return props.history.push("/");
+	const handlePageInfo = async (token) => {
+		const followedParamsArray = [{ type: "artist", }, { limit: 5, }];
+		const followedResponse = await spotifyFollowedArtistCall(followedParamsArray, token);
+		if (followedResponse?.error?.status || !localStorage.getItem("token")) return props.history.push("/");
 
-        const tracksParamsArray = [{ limit: 5, }, { market: "PT" }];
-        const tracksResponse = await spotifySavedTracksCall(tracksParamsArray, token);
-        if (tracksResponse?.error?.status || !localStorage.getItem("token")) return props.history.push("/");
+		const tracksParamsArray = [{ limit: 5, }, { market: "PT" }];
+		const tracksResponse = await spotifySavedTracksCall(tracksParamsArray, token);
+		if (tracksResponse?.error?.status || !localStorage.getItem("token")) return props.history.push("/");
 
-        const albumsParamsArray = [{ limit: 5, }, { market: "PT" }];
-        const albumsResponse = await spotifyAlbumsCall(albumsParamsArray, token);
-        if (albumsResponse?.error?.status || !localStorage.getItem("token")) return props.history.push("/");
+		const albumsParamsArray = [{ limit: 5, }, { market: "PT" }];
+		const albumsResponse = await spotifyAlbumsCall(albumsParamsArray, token);
+		if (albumsResponse?.error?.status || !localStorage.getItem("token")) return props.history.push("/");
 
-        setFollowed(followedResponse.artists.items);
-        setTracks(tracksResponse.items);
-        setAlbums(albumsResponse.items);
-        setLoading(false);
-    }
+		setFollowed(followedResponse.artists.items);
+		setTracks(tracksResponse.items);
+		setAlbums(albumsResponse.items);
+		setLoading(false);
+	}
 
-    const redirectToAlbumDetails = (id) => { props.history.push({ pathname: `/albums/${id}` }) }
-    const redirectToTrackDetails = (id) => { props.history.push({ pathname: `/tracks/${id}` }) }
-    const redirectToArtistDetails = (id) => { props.history.push({ pathname: `/artists/${id}` }) }
+	const redirectToAlbumDetails = (id) => { props.history.push({ pathname: `/albums/${id}` }) }
+	const redirectToTrackDetails = (id) => { props.history.push({ pathname: `/tracks/${id}` }) }
+	const redirectToArtistDetails = (id) => { props.history.push({ pathname: `/artists/${id}` }) }
 
-    useEffect(() => {
-        let token = localStorage.getItem("token");
-        handlePageInfo(token);
-    }, []);
+	useEffect(() => {
+		let token = localStorage.getItem("token");
+		handlePageInfo(token);
+	}, []);
 
-    return (
-        <>
-            <NavBar />
-            <div className="dashboard">
-                <div style={{ backgroundImage: `url(${dashboardImage})` }} className="image-cover-container" />
-                <h2 className="dashboard-title">Search for your favorite artists, albums or songs</h2>
-                <SearchBar props={props} />
-                {loading ?
-                    <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
-                    :
-                    <div className="my-top-five">
-                        <div className="followed">
-                            <BasicCard type={"followed"} artists={followed} onClickArtist={(id) => redirectToArtistDetails(id)} />
-                        </div>
-                        <div className="saved-tracks">
-                            <BasicCard type={"tracks"} tracks={tracks} onClickTrack={(id) => redirectToTrackDetails(id)} />
-                        </div>
-                        <div className="saved-albums">
-                            <BasicCard type={"album"} albums={albums} onClickAlbum={(id) => redirectToAlbumDetails(id)} />
-                        </div>
-                    </div>
-                }
-            </div>
-        </>
-    );
+	return (
+		<>
+			<NavBar />
+			<div className="dashboard">
+				<div style={{ backgroundImage: `url(${dashboardImage})` }} className="image-cover-container" />
+				<h2 className="dashboard-title">Search for your favorite artists, albums or songs</h2>
+				<SearchBar props={props} />
+				{loading ?
+					<Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
+					:
+					<div className="my-top-five">
+						<div className="followed">
+							<BasicCard type={"followed"} artists={followed} onClickArtist={(id) => redirectToArtistDetails(id)} />
+						</div>
+						<div className="saved-tracks">
+							<BasicCard type={"tracks"} tracks={tracks} onClickTrack={(id) => redirectToTrackDetails(id)} />
+						</div>
+						<div className="saved-albums">
+							<BasicCard type={"album"} albums={albums} onClickAlbum={(id) => redirectToAlbumDetails(id)} />
+						</div>
+					</div>
+				}
+			</div>
+		</>
+	);
 };
 
 export default Dashboard;

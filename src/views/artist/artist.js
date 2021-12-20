@@ -13,122 +13,122 @@ import Box from '@mui/material/Box';
 import "./style.css";
 
 const Artist = ({ location: { state }, history }) => {
-    const [follow, setFollow] = useState(true);
-    const [loading, setLoading] = useState(true);
-    const [artist, setArtist] = useState();
-    const [artistImage, setArtistImage] = useState();
-    const [artistGenres, setArtistGenres] = useState([]);
-    const [artistTopTracks, setArtistTopTracks] = useState([]);
-    const [artistAlbums, setArtistAlbums] = useState([]);
+	const [follow, setFollow] = useState(true);
+	const [loading, setLoading] = useState(true);
+	const [artist, setArtist] = useState();
+	const [artistImage, setArtistImage] = useState();
+	const [artistGenres, setArtistGenres] = useState([]);
+	const [artistTopTracks, setArtistTopTracks] = useState([]);
+	const [artistAlbums, setArtistAlbums] = useState([]);
 
-    const { id } = useParams();
+	const { id } = useParams();
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) history.push("/");
-        handlePageInfo();
-    }, []);
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (!token) history.push("/");
+		handlePageInfo();
+	}, []);
 
-    const handlePageInfo = async () => {
-        const token = localStorage.getItem("token");
+	const handlePageInfo = async () => {
+		const token = localStorage.getItem("token");
 
-        const artistResponse = await spotifyArtistsCall(id, token);
-        if (artistResponse?.error?.status || !token) return history.push("/");
+		const artistResponse = await spotifyArtistsCall(id, token);
+		if (artistResponse?.error?.status || !token) return history.push("/");
 
-        const topTracksResponse = await spotifyArtistTopTracksCall(id, token);
-        if (topTracksResponse?.error?.status || !token) return history.push("/");
+		const topTracksResponse = await spotifyArtistTopTracksCall(id, token);
+		if (topTracksResponse?.error?.status || !token) return history.push("/");
 
-        const artistAlbumsResponse = await spotifyArtistAlbumsCall(id, token);
-        if (artistAlbumsResponse?.error?.status || !token) return history.push("/");
+		const artistAlbumsResponse = await spotifyArtistAlbumsCall(id, token);
+		if (artistAlbumsResponse?.error?.status || !token) return history.push("/");
 
-        setArtist(artistResponse);
-        setArtistImage(artistResponse.images[0]?.url);
-        setArtistGenres(artistResponse.genres);
-        setArtistTopTracks(topTracksResponse.tracks);
-        setArtistAlbums(artistAlbumsResponse.items);
-        setLoading(false);
-    }
+		setArtist(artistResponse);
+		setArtistImage(artistResponse.images[0]?.url);
+		setArtistGenres(artistResponse.genres);
+		setArtistTopTracks(topTracksResponse.tracks);
+		setArtistAlbums(artistAlbumsResponse.items);
+		setLoading(false);
+	}
 
-    const unfollowArtist = async () => {
-        const token = localStorage.getItem("token");
-        const result = await spotifyArtistUnfollowCall(id, token);
-        if (result?.error?.status || !token) return history.push("/");
+	const unfollowArtist = async () => {
+		const token = localStorage.getItem("token");
+		const result = await spotifyArtistUnfollowCall(id, token);
+		if (result?.error?.status || !token) return history.push("/");
 
-        setFollow(!follow);
-    }
+		setFollow(!follow);
+	}
 
-    const followArtist = async () => {
-        const token = localStorage.getItem("token");
-        const result = await spotifyArtistFollowCall(id, localStorage.getItem("token"));
-        if (result?.error?.status || !token) return history.push("/");
+	const followArtist = async () => {
+		const token = localStorage.getItem("token");
+		const result = await spotifyArtistFollowCall(id, localStorage.getItem("token"));
+		if (result?.error?.status || !token) return history.push("/");
 
-        setFollow(!follow);
-    }
+		setFollow(!follow);
+	}
 
-    return (
-        <>
-            {loading ?
-                <Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
-                :
-                <div className="main-container">
-                    <div className="head-container">
-                        <span className="button-dashboard" onClick={() => history.push("/dashboard")}><a href="#"></a></span>
-                        <h3 className="rainbow rainbow_text_animated">{artist.name}</h3>
-                        <div className="image-container">
-                            <img src={artistImage} alt="cover" style={{ width: 320, height: 320 }} />
-                        </div>
-                    </div>
-                    <div className="body-container">
-                        <div className="left-container">
-                            <Card sx={{ minWidth: 275, display: 'flex' }}>
-                                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                    <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Artist info:</Typography>
-                                        <Typography variant="body2"><b>Name:</b> {artist.name} </Typography>
-                                        <Typography variant="body2"><b>Genres played:</b>
-                                            {artistGenres.map((genre, index) => {
-                                                return (index + 1) < artistGenres.length ? " " + genre + ", " : genre + ".";
-                                            })} </Typography>
-                                        <Typography variant="body2"> <b>Check out the artist on spotify:</b><a href={artist.uri}> {artist.name}</a></Typography>
-                                        <Typography variant="body2">Would you like to follow the artist? If so, press the button: <button className="follow-button" onClick={follow ? unfollowArtist : followArtist}>{follow ? "Unfollow artist" : "Follow artist"}</button></Typography>
-                                    </CardContent>
-                                </Box>
-                            </Card>
-                        </div>
-                        <div className="mid-container">
-                            <Card sx={{ minWidth: 275, display: 'flex' }}>
-                                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                    <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Top 5 tracks:</Typography>
-                                        {artistTopTracks.map((track, index) => {
-                                            if (index <= 4) return <Typography key={index} variant="body2"> <a href={track.uri}>{track.name}</a></Typography>;
-                                        })}
-                                    </CardContent>
-                                </Box>
-                            </Card>
-                        </div>
-                        <div className="right-container">
-                            <Card sx={{ minWidth: 275, display: 'flex' }}>
-                                <Box sx={{ display: "flex", flexDirection: "column" }}>
-                                    <CardContent sx={{ flex: '1 0 auto' }}>
-                                        <Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Albums:</Typography>
-                                        {artistAlbums.map((album, index) => {
-                                            return (
-                                                <div key={index + 1000} className="dashboard-searchbox" style={{ justifyContent: "flex-start" }}>
-                                                    <img key={index + 100} src={album?.images[0]?.url} alt="album" style={{ width: 25, height: 25, marginRight: 5 }} />
-                                                    <Typography key={index} variant="body2"><a href={album.uri}>{album.name}</a></Typography>
-                                                </div>
-                                            )
-                                        })}
-                                    </CardContent>
-                                </Box>
-                            </Card>
-                        </div>
-                    </div>
-                </div>
-            }
-        </>
-    );
+	return (
+		<>
+			{loading ?
+				<Box sx={{ display: 'flex' }} style={{ justifyContent: "center", marginTop: 50 }}><CircularProgress /></Box>
+				:
+				<div className="main-container">
+					<div className="head-container">
+						<span className="button-dashboard" onClick={() => history.push("/dashboard")}><a href="#"></a></span>
+						<h3 className="rainbow rainbow_text_animated">{artist.name}</h3>
+						<div className="image-container">
+							<img src={artistImage} alt="cover" style={{ width: 320, height: 320 }} />
+						</div>
+					</div>
+					<div className="body-container">
+						<div className="left-container">
+							<Card sx={{ minWidth: 275, display: 'flex' }}>
+								<Box sx={{ display: "flex", flexDirection: "column" }}>
+									<CardContent sx={{ flex: '1 0 auto' }}>
+										<Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Artist info:</Typography>
+										<Typography variant="body2"><b>Name:</b> {artist.name} </Typography>
+										<Typography variant="body2"><b>Genres played:</b>
+											{artistGenres.map((genre, index) => {
+												return (index + 1) < artistGenres.length ? " " + genre + ", " : genre + ".";
+											})} </Typography>
+										<Typography variant="body2"> <b>Check out the artist on spotify:</b><a href={artist.uri}> {artist.name}</a></Typography>
+										<Typography variant="body2">Would you like to follow the artist? If so, press the button: <button className="follow-button" onClick={follow ? unfollowArtist : followArtist}>{follow ? "Unfollow artist" : "Follow artist"}</button></Typography>
+									</CardContent>
+								</Box>
+							</Card>
+						</div>
+						<div className="mid-container">
+							<Card sx={{ minWidth: 275, display: 'flex' }}>
+								<Box sx={{ display: "flex", flexDirection: "column" }}>
+									<CardContent sx={{ flex: '1 0 auto' }}>
+										<Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Top 5 tracks:</Typography>
+										{artistTopTracks.map((track, index) => {
+											if (index <= 4) return <Typography key={index} variant="body2"> <a href={track.uri}>{track.name}</a></Typography>;
+										})}
+									</CardContent>
+								</Box>
+							</Card>
+						</div>
+						<div className="right-container">
+							<Card sx={{ minWidth: 275, display: 'flex' }}>
+								<Box sx={{ display: "flex", flexDirection: "column" }}>
+									<CardContent sx={{ flex: '1 0 auto' }}>
+										<Typography sx={{ fontSize: 26 }} color="text.secondary" gutterBottom>Albums:</Typography>
+										{artistAlbums.map((album, index) => {
+											return (
+												<div key={index + 1000} className="dashboard-searchbox" style={{ justifyContent: "flex-start" }}>
+													<img key={index + 100} src={album?.images[0]?.url} alt="album" style={{ width: 25, height: 25, marginRight: 5 }} />
+													<Typography key={index} variant="body2"><a href={album.uri}>{album.name}</a></Typography>
+												</div>
+											)
+										})}
+									</CardContent>
+								</Box>
+							</Card>
+						</div>
+					</div>
+				</div>
+			}
+		</>
+	);
 };
 
 export default Artist;
